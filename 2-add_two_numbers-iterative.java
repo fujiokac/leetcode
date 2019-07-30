@@ -1,5 +1,7 @@
 /**
- * You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+ * You are given two non-empty linked lists representing two non-negative integers.
+ * The digits are stored in reverse order and each of their nodes contain a single digit.
+ * Add the two numbers and return it as a linked list.
  *
  * You may assume the two numbers do not contain any leading zero, except the number 0 itself.
  *
@@ -7,9 +9,9 @@
  *
  * Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
  * Output: 7 -> 0 -> 8
-Exp
-lanation: 342 + 465 = 807.
- * /
+ * Explanation: 342 + 465 = 807.
+ */
+
 /**
  * Definition for singly-linked list.
  * public class ListNode {
@@ -19,28 +21,37 @@ lanation: 342 + 465 = 807.
  * }
  */
 class Solution {
-    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        // return addTwoH(l1, l2, false);
-        int sum = 0, carry = 0;
+    public ListNode addTwoNumbers(ListNode list1, ListNode list2) {
         ListNode head = null;
         ListNode tail = null;
+        boolean end1 = list1 == null;
+        boolean end2 = list2 == null;
+        boolean carry = false;
 
-        while(l1 != null && l2 != null) {
-            sum = carry;
-            if(l1 != null) {
-                sum += l1.val;
-                l1 = l1.next;
+        // While lists are not empty or a carry is being completed
+        while(carry || !(end1 || end2)) {
+            int sum = carry ? 1 : 0;
+            // Add values to sum and increment listnodes
+            if(!end1) {
+                sum += list1.val;
+                list1 = list1.next;
+                end1 = list1 == null;
             }
-            if(l2 != null) {
-                sum += l2.val;
-                l2 = l2.next;
+            if(!end2) {
+                sum += list2.val;
+                list2 = list2.next;
+                end2 = list2 == null;
             }
 
-            carry = sum / 10;
-            sum %= 10;
+            // Determine carry & remainder
+            carry = sum > 9;
+            if(carry) {
+                sum -= 10;
+            }
 
             ListNode result = new ListNode(sum);
 
+            // Establish/increment result LL
             if(head == null) {
                 head = result;
                 tail = result;
@@ -49,36 +60,17 @@ class Solution {
                 tail.next = result;
                 tail = tail.next;
             }
-
-            if(l1 == null) {
-                tail.next = finishSum(l2, carry == 1);
-            }
-            else if(l2 == null) {
-                tail.next = finishSum(l1, carry == 1);
+            // If no values to carry, fill in result with remaining list nodes
+            if(!carry) {
+                if(end1) {
+                    result.next = list2;
+                }
+                else if(end2) {
+                    result.next = list1;
+                }
             }
         }
-
+        // Done
         return head;
-    }
-
-    public ListNode finishSum(ListNode node, boolean carry) {
-        if(!carry) {
-            return node;
-        }
-        if(node == null) {
-            return new ListNode(1);
-        }
-
-        ListNode result = null;
-        if (node.val < 9) {
-            result = new ListNode(node.val + 1);
-            result.next = node.next;
-        }
-        else {
-            result = new ListNode(0);
-            result.next = finishSum(node.next, true);
-        }
-
-        return result;
     }
 }
