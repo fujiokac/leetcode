@@ -13,6 +13,7 @@ class Solution {
      * Make map and unfold rows into one string as return value O(n)
      */
     public String convert(String s, int numRows) {
+        // Edge Cases
         if(s.length() < 2) {
             return s;
         }
@@ -22,28 +23,29 @@ class Solution {
         if(numRows == 1) {
             return s;
         }
-        Map<Integer, StringBuilder> map = makeMap(s, numRows);
+        // Common cases
+        StringBuilder[] map = makeMap(s, numRows);
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < numRows; i++) {
-            if(map.containsKey(i)) {
-                sb.append(map.get(i).toString());
+            if(map[i] != null) {
+                sb.append(map[i].toString());
             }
         }
         return sb.toString();
     }
     /**
      * Iterate through the string O(n)
-     * Determine row & add to HashMap O(1)
+     * Determine row & add to Array of StringBuilder O(1)
      */
-    public Map<Integer, StringBuilder> makeMap(String s, int numRows) {
-        Map<Integer, StringBuilder> map = new HashMap<Integer, StringBuilder>();
+    public StringBuilder[] makeMap(String s, int numRows) {
+        StringBuilder[] map = new StringBuilder[numRows];
         int modulo = 2*(numRows - 1);
         for(int i = 0; i < s.length(); i++) {
             int row = determineRow(i, modulo, numRows);
-            if(!map.containsKey(row)) {
-                map.put(i, new StringBuilder());
+            if(map[row] == null) {
+                map[row] = new StringBuilder();
             }
-            map.get(row).append(s.charAt(i));
+            map[row].append(s.charAt(i));
         }
         return map;
     }
