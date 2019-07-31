@@ -5,17 +5,22 @@
 
 /**
  * Design thoughts:
- * Using a stack to confirm/count palindrome?
- * Uses a lot of memory by creating a lot of objects...
- * Simulate stack-like behavior using left-right indices.
- *
- * How to handle even & odd palindromes e.g. abba and aba?
  *
  * Naive solution, iterate through each letter,
  * counting left & right until characters don't match
  *
- * Maximum palindrome length is s.length()/2
- * Start from middle of string to optimize for this.
+ * Ways to optimize:
+ * -- Longest possible palindrome would "begin" at the middle of the string, start search there
+ * -- If the search gets towards the edges, the possible longest length decreases
+ *      Corollaries:
+ *      -- If a palindrome hits the stringe edge and is current max length, it is the largest possible
+ *      -- If the search reaches an index such that len-2*i < current max,
+ *      (with i being distance from center), the current max is the largest possible
+ *
+ * Cases:
+ * -- Empty or single letter case
+ * -- How to handle even & odd palindromes e.g. abba and aba?
+ *      left-right starting indices
  *
  */
 class Solution {
