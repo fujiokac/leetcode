@@ -1,5 +1,4 @@
-import java.util.Map;
-import java.util.HashMap;
+import java.util.Arrays;
 
 class Solution {
     public static void main(String[] args) {
@@ -14,38 +13,29 @@ class Solution {
      */
     public String convert(String s, int numRows) {
         // Edge Cases
-        if(s.length() < 2) {
+        if(s.length() <= numRows || numRows == 1) {
             return s;
         }
         if(numRows == 0) {
             return "";
         }
-        if(numRows == 1) {
-            return s;
-        }
         // Common cases
-        StringBuilder[] map = makeMap(s, numRows);
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < numRows; i++) {
-            if(map[i] != null) {
-                sb.append(map[i].toString());
-            }
-        }
-        return sb.toString();
+        return String.valueOf(sortLetters(s, numRows));
     }
     /**
      * Iterate through the string O(n)
-     * Determine row & add to Array of StringBuilder O(1)
+     * Determine row & add to array of char O(1)
      */
-    public StringBuilder[] makeMap(String s, int numRows) {
-        StringBuilder[] map = new StringBuilder[numRows];
+    public char[] sortLetters(String s, int numRows) {
+        int len = s.length();
         int modulo = 2*(numRows - 1);
-        for(int i = 0; i < s.length(); i++) {
+        char[] map = new char[len];
+        int[] index = indexArray(len, modulo, numRows);
+        // System.out.println(Arrays.toString(index));
+        for(int i = 0; i < len; i++) {
             int row = determineRow(i, modulo, numRows);
-            if(map[row] == null) {
-                map[row] = new StringBuilder();
-            }
-            map[row].append(s.charAt(i));
+            // System.out.println(String.format("%d %d %d",i,row,index[row]));
+            map[index[row]++] = s.charAt(i);
         }
         return map;
     }
@@ -60,5 +50,31 @@ class Solution {
             row = modulo - row;
         }
         return row;
+    }
+    /**
+     * Initialize array of indices where:
+     * arr[row] = starting index of each row in final string
+     * To be applied to charArray[length]
+     */
+    public int[] indexArray(int length, int modulo, int numRows) {
+        int[] indexArray = new int[numRows];
+        int reps = length / modulo;
+        int remainder = length % modulo;
+        int index = 0;
+        for(int row = 1; row < numRows; row++) {
+            // The formula for the starting index of each row
+            index += (row > 1 ? 2 : 1)*reps;
+            if(remainder > 0) {
+                index++;
+                remainder--;
+            }
+            if(remainder > 2*(numRows - row)-1) {
+                index++;
+                remainder--;
+            }
+
+            indexArray[row] = index;
+        }
+        return indexArray;
     }
 }
