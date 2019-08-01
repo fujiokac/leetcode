@@ -20,24 +20,22 @@ class Solution {
             return "";
         }
         // Common cases
-        return String.valueOf(sortLetters(s, numRows));
+        return String.valueOf(reorder(s, numRows));
     }
     /**
      * Iterate through the string O(n)
      * Determine row & add to array of char O(1)
      */
-    public char[] sortLetters(String s, int numRows) {
+    public char[] reorder(String s, int numRows) {
         int len = s.length();
         int modulo = 2*(numRows - 1);
-        char[] map = new char[len];
+        char[] newOrder = new char[len];
         int[] index = indexArray(len, modulo, numRows);
-        // System.out.println(Arrays.toString(index));
         for(int i = 0; i < len; i++) {
             int row = determineRow(i, modulo, numRows);
-            // System.out.println(String.format("%d %d %d",i,row,index[row]));
-            map[index[row]++] = s.charAt(i);
+            newOrder[index[row]++] = s.charAt(i);
         }
-        return map;
+        return newOrder;
     }
     /**
      * Formula by which row is assigned O(1):
@@ -63,11 +61,15 @@ class Solution {
         int index = 0;
         for(int row = 1; row < numRows; row++) {
             // The formula for the starting index of each row
+            // Note: I was using a formula before, but it was immensely unreadable & difficult to debug
+            // Base value from repeated zigzag
             index += (row > 1 ? 2 : 1)*reps;
+            // Value for remainder on zig
             if(remainder > 0) {
                 index++;
                 remainder--;
             }
+            // Value for remainder on zag
             if(remainder > 2*(numRows - row)-1) {
                 index++;
                 remainder--;
