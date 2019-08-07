@@ -17,7 +17,8 @@
     }
 
     public int reverse(int x) {
-        if(Math.abs(x) < 10) {
+        // Edge case: Absolute value of x < 10
+        if(x < 10 && x > -10) {
             return x;
         }
         return reverseH(x);
@@ -33,7 +34,6 @@
         char[] reversed = new char[len];
         // True if possibility of overflow
         boolean checkOverflow = len == max.length();
-
         // Iterate backwards over string value
         for(int l = 0, r = len-1; l < len; l++, r--) {
             // Handle negative values
