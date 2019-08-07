@@ -21,17 +21,17 @@
         if(x < 10 && x > -10) {
             return x;
         }
-
+        // Common Case
         int result = 0;
-        boolean neg = x < 0;
-        int max = neg ? Integer.MIN_VALUE / 10 : Integer.MAX_VALUE / 10;
+        int previous = 0;
         while(x != 0) {
-            int r = x % 10;
-            if((neg && result < max) || (!neg && result > max)) {
+            previous = result;
+            result = result*10 + x % 10;
+            x /= 10;
+            // If overflow, result/10 will not = previous
+            if(result / 10 != previous) {
                 return 0;
             }
-            result = result*10 + r;
-            x /= 10;
         }
         return result;
     }
