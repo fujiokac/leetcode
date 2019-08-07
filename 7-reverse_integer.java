@@ -21,44 +21,18 @@
         if(x < 10 && x > -10) {
             return x;
         }
-        return reverseH(x);
-    }
 
-    public int reverseH(int x) {
+        int result = 0;
         boolean neg = x < 0;
-        // Convert x and min/max value into strings
-        String xString = String.valueOf(x);
-        String max = String.valueOf(neg ? Integer.MIN_VALUE : Integer.MAX_VALUE);
-
-        int len = xString.length();
-        char[] reversed = new char[len];
-        // True if possibility of overflow
-        boolean checkOverflow = len == max.length();
-        // Iterate backwards over string value
-        for(int l = 0, r = len-1; l < len; l++, r--) {
-            // Handle negative values
-            if(l == 0 && neg) {
-                reversed[l] = '-';
-                l++;
+        int max = neg ? Integer.MIN_VALUE / 10 : Integer.MAX_VALUE / 10;
+        while(x != 0) {
+            int r = x % 10;
+            if((neg && result < max) || (!neg && result > max)) {
+                return 0;
             }
-            // Current digit under comparison
-            char digit = xString.charAt(r);
-            // If checkOverflow is flagged, compare digit to max digit at new location
-            if(checkOverflow) {
-                // Current digit is less than max digit, no longer risk of overflow
-                if(digit < max.charAt(l)) {
-                    checkOverflow = false;
-                }
-                // Current digit is greater than max digit -- overflow case
-                else if(digit > max.charAt(l)) {
-                    return 0;
-                }
-                // If digit == max digit, not overflow, but risk remains
-            }
-            // Valid digit added to array
-            reversed[l] = digit;
+            result = result*10 + r;
+            x /= 10;
         }
-        // Convert char array to String to int
-        return Integer.valueOf(String.valueOf(reversed));
+        return result;
     }
 }
