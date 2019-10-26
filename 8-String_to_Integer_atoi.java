@@ -1,36 +1,34 @@
-import java.util.regex.*;
 class Solution {
-    public static final Pattern ATOI = Pattern.compile(" *([+-]?)0*(\\d+).*");
-    public static final int MAX_LEN = 10;
-
     public int myAtoi(String str) {
-        if (str.length() == 0) {
+        if(str == null || str.length() == 0) {
             return 0;
         }
 
-        Matcher m = ATOI.matcher(str);
-        if(!m.matches()) {
-            return 0;
-        }
+        str = str.trim();
+        boolean isNegative = false;
 
-        return atoiHelper("-".equals(m.group(1)), m.group(2));
-    }
-
-    private int atoiHelper(boolean negative, String str) {
-        int maxInt = negative ? Integer.MIN_VALUE : Integer.MAX_VALUE;
-
-        if(str.length() > MAX_LEN) {
-            return maxInt;
-        }
-
-        String compareStr = String.valueOf(maxInt);
-
-        if(str.length() == MAX_LEN) {
-            int compare = str.compareTo(negative ? compareStr.substring(1) : compareStr);
-            if(compare >= 0) {
-                return maxInt;
+        if(str.length() != 0 && !Character.isDigit(str.charAt(0))) {
+            isNegative = str.charAt(0) == '-';
+            if(isNegative || str.charAt(0) == '+') {
+                str = str.substring(1);
             }
         }
-        return Integer.valueOf(str) * (negative ? -1 : 1);
+
+        int number = 0;
+
+        for (int i = 0; i < str.length(); i++) {
+            if (!Character.isDigit(str.charAt(i))) {
+                break;
+            }
+
+            int digit = str.charAt(i) - '0';
+            if ((Integer.MAX_VALUE - digit) / 10 < number) {
+                return isNegative ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+            }
+            number *= 10;
+            number += digit;
+        }
+
+        return isNegative ? -number : number;
     }
 }
