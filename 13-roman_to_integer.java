@@ -2,19 +2,19 @@ class Solution {
     /**
      * Given a roman numeral, convert it to an integer. Input is guaranteed to be within the range from 1 to 3999.
      */
-     public int romanToInt(String s) {
-        int num = 0;
-        for(int i = 0, length = s.length() - 1; i <= length; i++) {
-            int first = romanToInt(s.charAt(i));
-            if(i < length) {
-                int second = romanToInt(s.charAt(i + 1));
-                if(first <= second) {
-                    num += first < second ? second - first : first + second;
-                    i++;
-                    continue;
-                }
+    public int romanToInt(String s) {
+        if(s == null || s.isEmpty()) {
+            return 0;
+        }
+        int previous = romanToInt(s.charAt(0));
+        int num = previous;
+        for(int i = 1; i < s.length(); i++) {
+            int current = romanToInt(s.charAt(i));
+            num += current;
+            if(previous < current) {
+                num -= 2 * previous;
             }
-            num += first;
+            previous = current;
         }
         return num;
     }
