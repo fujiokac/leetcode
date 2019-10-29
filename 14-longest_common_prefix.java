@@ -3,29 +3,29 @@
  * If there is no common prefix, return an empty string "".
 */
 class Solution {
-    // More readable solution
+    // Bottom up solution using substring instead of StringBuilder
     public String longestCommonPrefix(String[] strs) {
-        StringBuilder prefix = new StringBuilder();
-        for(int letter = 0; ; letter++) {
-            char c = commonLetterAt(letter, strs);
-            if(c == 0) {
-                break;
-            }
-            prefix.append(c);
+        if(strs == null || strs.length == 0) {
+            return "";
         }
-        return prefix.toString();
-    }
 
-    private char commonLetterAt(int i, String[] strs) {
-        char c = 0;
-        for(int word = 0; word < strs.length; word++) {
-            if(strs[word].length() <= i || (word != 0 && c != strs[word].charAt(i))) {
-                return 0;
-            }
-            if(word == 0) {
-                c = strs[word].charAt(i);
+        String base = strs[0];
+        int end = base.length();
+        for(int letter = end-1; letter > -1; letter--) {
+            char c = base.charAt(letter);
+            for(int word = 1; word < strs.length; word++) {
+                if(!base.equals(word)) {
+                    int length = strs[word].length();
+                    if(length <= letter) {
+                        end = length;
+                        letter = length;
+                    }
+                    else if(c != strs[word].charAt(letter)) {
+                        end = letter;
+                    }
+                }
             }
         }
-        return c;
+        return base.substring(0, end);
     }
 }
