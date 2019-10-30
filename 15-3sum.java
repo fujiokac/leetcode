@@ -11,14 +11,12 @@ class Solution {
 
         if(nums.length == 3) {
             if(nums[0] + nums[1] + nums[2] == 0) {
-                return new ArrayList() {{
-                    add(Arrays.asList(nums));
-                }};
+                return Collections.singletonList(Arrays.asList(nums[0], nums[1], nums[2]));
             }
             return Collections.emptyList();
         }
 
-        TreeSet<Integer> numSet = new TreeSet<>();
+        HashSet<Integer> numSet = new HashSet<>();
         HashSet<Integer> duplicates = new HashSet<>();
 
         for (int i = 0; i < nums.length; i++) {
@@ -32,7 +30,7 @@ class Solution {
 
     private List<List<Integer>> findTriplets(Set<Integer> numSet, Set<Integer> duplicates) {
         ArrayList<List<Integer>> triplets = new ArrayList<>();
-        Integer[] sorted = numSet.toArray(new Integer[numSet.size()]);
+        int[] sorted = numSet.stream().mapToInt(Number::intValue).sorted().toArray();
         for (Iterator<Integer> it = numSet.iterator(); it.hasNext();) {
             int first = it.next();
             for (int i = 0, j = sorted.length-1; j > i;) {
