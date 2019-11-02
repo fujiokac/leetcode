@@ -30,25 +30,27 @@ class Solution {
 
     private List<List<Integer>> findTriplets(Set<Integer> numSet, Set<Integer> duplicates) {
         ArrayList<List<Integer>> triplets = new ArrayList<>();
+        // Create sorted array of unique entries
         int[] sorted = numSet.stream().mapToInt(Number::intValue).sorted().toArray();
-        for (Iterator<Integer> it = numSet.iterator(); it.hasNext();) {
-            int first = it.next();
-            for (int i = 0, j = sorted.length-1; j > i;) {
-                if((first == sorted[i] || first == sorted[j]) && !duplicates.contains(first)) {
+        for (int i = 0, j = sorted.length-1; j > i;) {
+            int difference = 0 - sorted[i] - sorted[j];
+
+            // O(1) check on third value
+            if(numSet.contains(difference)) {
+                // Check if difference is a duplicate of two current values
+                if((difference != sorted[i] && difference != sorted[j]) || duplicates.contains(difference)) {
+                    triplets.add(Arrays.asList(difference, sorted[i], sorted[j]));
+                    i++;
+                    j--;
                     continue;
                 }
-
-                int sum = first + sorted[i] + sorted[j];
-
-                if(sum == 0) {
-                    triplets.add(Arrays.asList(first, sorted[i], sorted[j]));
-                }
-                else if(sum > 0) {
-                    j--;
-                }
-                else if(sum < 0) {
-                    i++;
-                }
+            }
+            // Move pointers
+            if(difference >= sorted[j]) {
+                i++;
+            }
+            else {
+                j--;
             }
         }
 
