@@ -4,6 +4,9 @@
  * Note: The solution set must not contain duplicate triplets.
  */
 class Solution {
+    private HashSet<Integer> numSet;
+    private HashSet<Integer> duplicates;
+
     public List<List<Integer>> threeSum(int[] nums) {
         if (nums == null || nums.length < 3) {
             return Collections.emptyList();
@@ -16,44 +19,51 @@ class Solution {
             return Collections.emptyList();
         }
 
-        HashSet<Integer> numSet = new HashSet<>();
-        HashSet<Integer> duplicates = new HashSet<>();
+        initSets(nums);
+        Arrays.sort(nums);
+        return findTriplets(nums);
+    }
+
+    private List<List<Integer>> findTriplets(int[] sorted) {
+        ArrayList<List<Integer>> triplets = new ArrayList<>();
+        for (int i = 0; i < sorted.length-2; i++) {
+            if (i > 0 && sorted[i] == sorted[i-1]) {
+                continue;
+            }
+            for (int j = sorted.length-1; j > i+1; j--) {
+                if (j < sorted.length-1 && sorted[j] == sorted[j+1]) {
+                    continue;
+                }
+                int difference = 0 - sorted[i] - sorted[j];
+                if (difference < sorted[i] || difference > sorted[j]) {
+                    // Break doesn't work here...
+                    continue;
+                }
+                if (isTriple(sorted[i], sorted[j], difference)) {
+                    triplets.add(Arrays.asList(sorted[i], difference, sorted[j]));
+                }
+            }
+        }
+
+        return triplets;
+    }
+
+    private void initSets(int[] nums) {
+        numSet = new HashSet<>();
+        duplicates = new HashSet<>();
 
         for (int i = 0; i < nums.length; i++) {
             if(!numSet.add(nums[i])) {
                 duplicates.add(nums[i]);
             }
         }
-
-        return findTriplets(numSet, duplicates);
     }
 
-    private List<List<Integer>> findTriplets(Set<Integer> numSet, Set<Integer> duplicates) {
-        ArrayList<List<Integer>> triplets = new ArrayList<>();
-        // Create sorted array of unique entries
-        int[] sorted = numSet.stream().mapToInt(Number::intValue).sorted().toArray();
-        for (int i = 0, j = sorted.length-1; j > i;) {
-            int difference = 0 - sorted[i] - sorted[j];
-
+    private boolean isTriple(int a, int b, int difference) {
+        return
             // O(1) check on third value
-            if(numSet.contains(difference)) {
-                // Check if difference is a duplicate of two current values
-                if((difference != sorted[i] && difference != sorted[j]) || duplicates.contains(difference)) {
-                    triplets.add(Arrays.asList(difference, sorted[i], sorted[j]));
-                    i++;
-                    j--;
-                    continue;
-                }
-            }
-            // Move pointers
-            if(difference >= sorted[j]) {
-                i++;
-            }
-            else {
-                j--;
-            }
-        }
-
-        return triplets;
+            numSet.contains(difference)
+            // O(1) check for duplicates
+            && ((difference != a && difference != b) || duplicates.contains(difference));
     }
 }
