@@ -2,10 +2,16 @@
  * Given an array nums of n integers, are there elements a, b, c in nums such that a + b + c = 0?
  * Find all unique triplets in the array which gives the sum of zero.
  * Note: The solution set must not contain duplicate triplets.
+ * [-1,0,1,2,-1,-4]
+ * [-1,0,1,0]
+ * [-4,-2,-2,-2,0,1,2,2,2,3,3,4,4,6,6]
+ * [-2,0,1,1,2]
+ * [0,0,0,0]
+ * [0,1,2,-1,4,1]
+ * [3,0,-2,-1,1,2]
  */
 class Solution {
-    private HashSet<Integer> numSet;
-    private HashSet<Integer> duplicates;
+    private int[] intMap;
 
     public List<List<Integer>> threeSum(int[] nums) {
         if (nums == null || nums.length < 3) {
@@ -19,28 +25,56 @@ class Solution {
             return Collections.emptyList();
         }
 
-        initSets(nums);
         Arrays.sort(nums);
+        if (nums[0] > 0 || nums[nums.length-1] < 0) {
+            return Collections.emptyList();
+        }
+
+        intMap = new int[nums[nums.length-1] - nums[0] + 1];
+        for (int i = 0; i < nums.length; i++) {
+            intMap[nums[i]-nums[0]]++;
+        }
+
         return findTriplets(nums);
     }
 
     private List<List<Integer>> findTriplets(int[] sorted) {
         ArrayList<List<Integer>> triplets = new ArrayList<>();
-        for (int i = 0; i < sorted.length-2; i++) {
-            if (i > 0 && sorted[i] == sorted[i-1]) {
+        int end = sorted.length-1;
+        for (int lo = 0; lo < end-1; lo++) {
+            // No remaining combinations on current value
+            if (sorted[lo] > 0) {
+                break;
+            }
+            // Identical value to previous
+            if (lo > 0 && sorted[lo] == sorted[lo-1]) {
                 continue;
             }
-            for (int j = sorted.length-1; j > i+1; j--) {
-                if (j < sorted.length-1 && sorted[j] == sorted[j+1]) {
+            // Zero triplet check
+            if (sorted[lo] == 0 && sorted[lo+1] == 0 && sorted[lo+2] == 0) {
+                triplets.add(Arrays.asList(0, 0, 0));
+                continue;
+            }
+            // Check remaining values
+            for (int hi = end; hi > lo+1; hi--) {
+                // No remaining combinations on current value
+                if (sorted[hi] < 0) {
+                    break;
+                }
+                // Identical value to previous
+                if (hi < end && sorted[hi] == sorted[hi+1]) {
                     continue;
                 }
-                int difference = 0 - sorted[i] - sorted[j];
-                if (difference < sorted[i] || difference > sorted[j]) {
-                    // Break doesn't work here...
+
+                int mid = 0 - sorted[lo] - sorted[hi];
+                System.out.println("" + sorted[lo] + " " + sorted[hi]  + " " + mid);
+                // Value out of range
+                if (mid < sorted[lo] || mid > sorted[hi]) {
                     continue;
                 }
-                if (isTriple(sorted[i], sorted[j], difference)) {
-                    triplets.add(Arrays.asList(sorted[i], difference, sorted[j]));
+                // Check if valid
+                if (isTriple(sorted[lo], sorted[hi], mid, sorted[0])) {
+                    triplets.add(Arrays.asList(sorted[lo], mid, sorted[hi]));
                 }
             }
         }
@@ -48,22 +82,9 @@ class Solution {
         return triplets;
     }
 
-    private void initSets(int[] nums) {
-        numSet = new HashSet<>();
-        duplicates = new HashSet<>();
-
-        for (int i = 0; i < nums.length; i++) {
-            if(!numSet.add(nums[i])) {
-                duplicates.add(nums[i]);
-            }
-        }
-    }
-
-    private boolean isTriple(int a, int b, int difference) {
+    private boolean isTriple(int lo, int hi, int mid, int offset) {
         return
             // O(1) check on third value
-            numSet.contains(difference)
-            // O(1) check for duplicates
-            && ((difference != a && difference != b) || duplicates.contains(difference));
+            intMap[mid - offset] > (mid != lo && mid != hi ? 0 : 1);
     }
 }
