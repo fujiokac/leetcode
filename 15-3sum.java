@@ -26,10 +26,12 @@ class Solution {
         }
 
         Arrays.sort(nums);
+        // Check that positive & negative (or zero) values exist
         if (nums[0] > 0 || nums[nums.length-1] < 0) {
             return Collections.emptyList();
         }
 
+        // Create an array map of # times for each value in nums
         intMap = new int[nums[nums.length-1] - nums[0] + 1];
         for (int i = 0; i < nums.length; i++) {
             intMap[nums[i]-nums[0]]++;
@@ -40,51 +42,47 @@ class Solution {
 
     private List<List<Integer>> findTriplets(int[] sorted) {
         ArrayList<List<Integer>> triplets = new ArrayList<>();
-        int end = sorted.length-1;
-        for (int lo = 0; lo < end-1; lo++) {
+        for (int lo = 0; lo < sorted.length - 2; lo++) {
             // No remaining combinations on current value
             if (sorted[lo] > 0) {
                 break;
             }
             // Identical value to previous
-            if (lo > 0 && sorted[lo] == sorted[lo-1]) {
+            if (lo > 0 && sorted[lo] == sorted[lo - 1]) {
                 continue;
             }
             // Zero triplet check
-            if (sorted[lo] == 0 && sorted[lo+1] == 0 && sorted[lo+2] == 0) {
+            if (sorted[lo] == 0 && sorted[lo + 1] == 0 && sorted[lo + 2] == 0) {
                 triplets.add(Arrays.asList(0, 0, 0));
                 continue;
             }
             // Check remaining values
-            for (int hi = end; hi > lo+1; hi--) {
+            for (int hi = sorted.length - 1; hi > lo + 1; hi--) {
                 // No remaining combinations on current value
                 if (sorted[hi] < 0) {
                     break;
                 }
                 // Identical value to previous
-                if (hi < end && sorted[hi] == sorted[hi+1]) {
+                if (hi < sorted.length - 1 && sorted[hi] == sorted[hi + 1]) {
                     continue;
                 }
 
                 int mid = 0 - sorted[lo] - sorted[hi];
-                System.out.println("" + sorted[lo] + " " + sorted[hi]  + " " + mid);
-                // Value out of range
-                if (mid < sorted[lo] || mid > sorted[hi]) {
+                // Value out of range -- hi is too high
+                if (mid < sorted[lo]) {
                     continue;
                 }
-                // Check if valid
-                if (isTriple(sorted[lo], sorted[hi], mid, sorted[0])) {
+                // Value out of range -- lo is too low
+                if (mid > sorted[hi]) {
+                    break;
+                }
+                // Check if mid exists in sufficient quantity
+                if (intMap[mid - sorted[0]] > (mid != sorted[lo] && mid != sorted[hi] ? 0 : 1)) {
                     triplets.add(Arrays.asList(sorted[lo], mid, sorted[hi]));
                 }
             }
         }
 
         return triplets;
-    }
-
-    private boolean isTriple(int lo, int hi, int mid, int offset) {
-        return
-            // O(1) check on third value
-            intMap[mid - offset] > (mid != lo && mid != hi ? 0 : 1);
     }
 }
