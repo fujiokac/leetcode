@@ -77,7 +77,7 @@ class Solution {
                     break;
                 }
                 // Check if mid exists in sufficient quantity
-                if (intMap[mid - sorted[0]] > (mid != sorted[lo] && mid != sorted[hi] ? 0 : 1)) {
+                if (intMap[mid - sorted[0]] > (mid == sorted[lo] || mid == sorted[hi] ? 1 : 0)) {
                     triplets.add(Arrays.asList(sorted[lo], mid, sorted[hi]));
                 }
             }
