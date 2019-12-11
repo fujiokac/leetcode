@@ -35,16 +35,22 @@ class Solution {
         digitCombos(digits, 0, new char[digits.length()], result);
         return result;
     }
-
+    /**
+     * Recursive helper function
+     */
     private void digitCombos(String digits, int index, char[] buffer, List<String> result) {
         if(index < digits.length()) {
+            // Iterate through letters mapped to digit at current index of string
             for (char letter : LETTERS[digits.charAt(index) - '2']) {
+                // Store letter temporarily in buffer
                 buffer[index] = letter;
+                // Recursive call on next digit
                 digitCombos(digits, index+1, buffer, result);
             }
         }
         else {
-                result.add(String.valueOf(buffer));
+            // End of string, convert buffer to String & add to result
+            result.add(String.valueOf(buffer));
         }
     }
 }
