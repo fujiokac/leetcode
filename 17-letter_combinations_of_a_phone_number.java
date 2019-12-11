@@ -14,15 +14,17 @@
  * 9: wxyz
 */
 class Solution {
-    public static final char[] TWO = new char[] {'a','b','c'};
-    public static final char[] THREE = new char[] {'d','e','f'};
-    public static final char[] FOUR = new char[] {'g','h','i'};
-    public static final char[] FIVE = new char[] {'j','k','l'};
-    public static final char[] SIX = new char[] {'m','n','o'};
-    public static final char[] SEVEN = new char[] {'p','q','r','s'};
-    public static final char[] EIGHT = new char[] {'t','u','v'};
-    public static final char[] NINE = new char[] {'w','x','y','z'};
-    public static final char[] EMPTY = new char[0];
+    public static final char[][] LETTERS = new char[][] {
+        {'a','b','c'},
+        {'d','e','f'},
+        {'g','h','i'},
+        {'j','k','l'},
+        {'m','n','o'},
+        {'p','q','r','s'},
+        {'t','u','v'},
+        {'w','x','y','z'}
+    };
+
 
     public List<String> letterCombinations(String digits) {
         if (digits.length() == 0) {
@@ -30,34 +32,20 @@ class Solution {
         }
 
         List<String> result = new ArrayList<>();
-        digitCombos(digits, 0, new StringBuffer(), result);
+        digitCombos(digits, 0, new char[digits.length()], result);
         return result;
     }
 
-    private void digitCombos(String digits, int index, StringBuffer sb, List<String> result) {
+    private void digitCombos(String digits, int index, char[] buffer, List<String> result) {
         if(index == digits.length()) {
-            result.add(sb.toString());
+            result.add(String.valueOf(buffer));
         }
         else {
-            for (char letter : digitToLetters(digits.charAt(index))) {
-                sb.append(letter);
-                digitCombos(digits, index+1, sb, result);
-                sb.deleteCharAt(sb.length()-1);
+            for (char letter : LETTERS[digits.charAt(index) - '2']) {
+                buffer[index] = letter;
+                digitCombos(digits, index+1, buffer, result);
             }
         }
     }
 
-    public char[] digitToLetters(char digit) {
-        switch(digit) {
-            case '2': return TWO;
-            case '3': return THREE;
-            case '4': return FOUR;
-            case '5': return FIVE;
-            case '6': return SIX;
-            case '7': return SEVEN;
-            case '8': return EIGHT;
-            case '9': return NINE;
-            default: return EMPTY;
-        }
-    }
 }
