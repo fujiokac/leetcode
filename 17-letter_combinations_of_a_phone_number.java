@@ -37,15 +37,14 @@ class Solution {
     }
 
     private void digitCombos(String digits, int index, char[] buffer, List<String> result) {
-        if(index == digits.length()) {
-            result.add(String.valueOf(buffer));
-        }
-        else {
+        if(index < digits.length()) {
             for (char letter : LETTERS[digits.charAt(index) - '2']) {
                 buffer[index] = letter;
                 digitCombos(digits, index+1, buffer, result);
             }
         }
+        else {
+                result.add(String.valueOf(buffer));
+        }
     }
-
 }
