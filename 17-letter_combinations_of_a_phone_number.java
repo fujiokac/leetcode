@@ -42,11 +42,11 @@ class Solution {
             result = letters;
         }
         else {
-            result = digitCombos(digits.substring(1)).stream()
-                .flatMap(s -> letters.stream()
-                        .map(l -> l+s)
-                )
-                .collect(Collectors.toList());
+            for (String s : digitCombos(digits.substring(1))) {
+                for (String letter : letters) {
+                    result.add(letter + s);
+                }
+            }
         }
         return result;
     }
