@@ -10,26 +10,24 @@ class Solution {
 
         List<String> combinations = new ArrayList<>();
         char[] comb = new char[n*2];
-        generateCombinations(0, 0, comb, combinations);
+        generateCombinations(0, 0, 0, comb, combinations);
         return combinations;
     }
 
-    private void generateCombinations(int index, int openParens, char[] comb, List<String> combinations) {
-        if (index == comb.length) {
-            if (openParens == 0) {
-                combinations.add(String.valueOf(comb));
-            }
-        }
-        else {
-            if (openParens * 2 < comb.length) {
+    private void generateCombinations(int index, int openParens, int totalParens, char[] comb, List<String> combinations) {
+        if (index < comb.length) {
+            if (totalParens < comb.length) {
                 comb[index] = '(';
-                generateCombinations(index + 1, openParens + 1, comb, combinations);
+                generateCombinations(index + 1, openParens + 1, totalParens + 2, comb, combinations);
             }
 
             if(openParens > 0) {
                 comb[index] = ')';
-                generateCombinations(index + 1, openParens - 1, comb, combinations);
+                generateCombinations(index + 1, openParens - 1, totalParens, comb, combinations);
             }
+        }
+        else {
+            combinations.add(String.valueOf(comb));
         }
     }
 }
