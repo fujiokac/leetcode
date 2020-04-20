@@ -16,28 +16,16 @@ class Solution {
 
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if (isClosed(c)) {
-                if (stack.isEmpty() || !isPair(c, stack.pop())) {
-                    return false;
-                }
-            }
-            else {
-                stack.push(c);
+            switch(c) {
+                case '(': stack.push(')'); break;
+                case '[': stack.push(']'); break;
+                case '{': stack.push('}'); break;
+                default:
+                    if (stack.isEmpty() || c != stack.pop()) {
+                        return false;
+                    }
             }
         }
         return stack.isEmpty();
-    }
-
-    private boolean isClosed(char c) {
-        return c == ')' || c == ']' || c == '}';
-    }
-
-    private boolean isPair(char close, char open) {
-        switch(open) {
-            case '(': return close == ')';
-            case '[': return close == ']';
-            case '{': return close == '}';
-            default: return false;
-        }
     }
 }
