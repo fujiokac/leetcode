@@ -24,39 +24,26 @@ class Solution {
             return l1;
         }
 
-        ListNode head = null;
-        ListNode tail = null;
+        // Root & runner nodes
+        ListNode root = new ListNode(0);
+        ListNode a = l1, b = l2, current = root;
 
         // Both lists contain elements
-        while (l1 != null && l2 != null) {
-            int newVal;
-            if (l1.val < l2.val) {
-                newVal = l1.val;
-                l1 = l1.next;
+        while (a != null && b != null) {
+            if (a.val < b.val) {
+                current.next = a;
+                a = a.next;
             }
             else {
-                newVal = l2.val;
-                l2 = l2.next;
+                current.next = b;
+                b = b.next;
             }
-
-            ListNode node = new ListNode(newVal);
-            if (head == null) {
-               head = node;
-               tail = node;
-            }
-            else {
-                tail.next = node;
-                tail = node;
-            }
+            current = current.next;
         }
 
-        if (l1 == null) {
-            tail.next = l2;
-        }
-        else {
-            tail.next = l1;
-        }
+        // Completing list with remaining list
+        current.next = a == null ? b : a;
 
-        return head;
+        return root.next;
     }
 }
