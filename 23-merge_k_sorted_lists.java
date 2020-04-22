@@ -15,19 +15,16 @@ class Solution {
             return null;
         }
 
-        List<ListNode> nodes = new ArrayList<>();
-        Set<Integer> emptyLists = new HashSet<>();
-        while (emptyLists.size() < lists.length) {
-            for (int i = 0; i < lists.length; i++) {
-                if (emptyLists.contains(i)) continue;
-                if (lists[i] == null) {
-                    emptyLists.add(i);
-                    continue;
-                }
+        PriorityQueue<ListNode> nodes = new PriorityQueue<>(new Comparator<ListNode>() {
+			@Override
+			public int compare(ListNode n1, ListNode n2) {
+				return n1.val - n2.val;
+			}
+		});
 
-                nodes.add(lists[i]);
-                lists[i] = lists[i].next;
-
+        for (ListNode node : lists) {
+            if (node != null) {
+                nodes.add(node);
             }
         }
 
@@ -35,19 +32,15 @@ class Solution {
             return null;
         }
 
-        Collections.sort(nodes, new Comparator<ListNode>() {
-			@Override
-			public int compare(ListNode n1, ListNode n2) {
-				return n1.val - n2.val;
-			}
-		});
-
         ListNode root = new ListNode(0);
         ListNode runner = root;
 
-		for (ListNode node : nodes) {
-		    runner.next = node;
+		while (!nodes.isEmpty()) {
+		    runner.next = nodes.poll();
 		    runner = runner.next;
+		    if (runner.next != null) {
+		        nodes.add(runner.next);
+		    }
 		}
 
         return root.next;
