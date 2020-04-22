@@ -15,33 +15,50 @@ class Solution {
             return null;
         }
 
-        PriorityQueue<ListNode> nodes = new PriorityQueue<>(new Comparator<ListNode>() {
-			@Override
-			public int compare(ListNode n1, ListNode n2) {
-				return n1.val - n2.val;
-			}
-		});
+        return mergeLists(lists);
+    }
 
-        for (ListNode node : lists) {
-            if (node != null) {
-                nodes.add(node);
-            }
+    private ListNode mergeLists(ListNode[] lists) {
+        if (lists.length == 1) {
+            return lists[0];
+        }
+        if (lists.length == 2) {
+            return mergeTwoLists(lists[0], lists[1]);
+        }
+        int mid = lists.length/2;
+        return mergeTwoLists(
+            mergeLists(Arrays.copyOfRange(lists, 0, mid)),
+            mergeLists(Arrays.copyOfRange(lists, mid, lists.length)));
+    }
+
+    private ListNode mergeTwoLists(ListNode a, ListNode b) {
+        // Both lists are empty
+        if (a == null) {
+            return b;
+        }
+        if (b == null) {
+            return a;
         }
 
-        if (nodes.isEmpty()) {
-            return null;
-        }
-
+        // Root & runner nodes
         ListNode root = new ListNode(0);
         ListNode runner = root;
 
-		while (!nodes.isEmpty()) {
-		    runner.next = nodes.poll();
-		    runner = runner.next;
-		    if (runner.next != null) {
-		        nodes.add(runner.next);
-		    }
-		}
+        // Both lists contain elements
+        while (a != null && b != null) {
+            if (a.val < b.val) {
+                runner.next = a;
+                a = a.next;
+            }
+            else {
+                runner.next = b;
+                b = b.next;
+            }
+            runner = runner.next;
+        }
+
+        // Completing list with remaining list
+        runner.next = a == null ? b : a;
 
         return root.next;
     }
