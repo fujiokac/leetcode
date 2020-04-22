@@ -15,20 +15,21 @@ class Solution {
             return null;
         }
 
-        return mergeLists(lists);
+        return mergeLists(lists, 0, lists.length);
     }
 
-    private ListNode mergeLists(ListNode[] lists) {
-        if (lists.length == 1) {
-            return lists[0];
+    private ListNode mergeLists(ListNode[] lists, int start, int end) {
+        int length = end - start;
+        if (length == 1) {
+            return lists[start];
         }
-        if (lists.length == 2) {
-            return mergeTwoLists(lists[0], lists[1]);
+        if (length == 2) {
+            return mergeTwoLists(lists[start], lists[end-1]);
         }
-        int mid = lists.length/2;
+        int mid = start + length/2;
         return mergeTwoLists(
-            mergeLists(Arrays.copyOfRange(lists, 0, mid)),
-            mergeLists(Arrays.copyOfRange(lists, mid, lists.length)));
+            mergeLists(lists, start, mid),
+            mergeLists(lists, mid, end));
     }
 
     private ListNode mergeTwoLists(ListNode a, ListNode b) {
