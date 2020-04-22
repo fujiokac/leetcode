@@ -18,31 +18,27 @@ class Solution {
         ListNode root = new ListNode(0);
         ListNode runner = root;
 
-        int mIndex = -1;
-        do {
-            int minVal = Integer.MAX_VALUE;
-            mIndex = -1;
-            for (int i = 0; i < lists.length; i++) {
-                if (lists[i] == null) {
-                    continue;
-                }
-                ListNode l = lists[i];
+        List<ListNode> nodes = new ArrayList<>();
+        for (int i = 0; i < lists.length; i++) {
+            ListNode node = lists[i];
+            while (node != null) {
+                nodes.add(node);
+                node = node.next;
+            }
 
-                if (l.val == runner.val && runner != root) {
-                    mIndex = i;
-                    break;
-                }
-                if (l.val < minVal) {
-                    mIndex = i;
-                    minVal = l.val;
-                }
-            }
-            if (mIndex != -1) {
-                runner.next = lists[mIndex];
-                runner = runner.next;
-                lists[mIndex] = lists[mIndex].next;
-            }
-        } while (mIndex != -1);
+        }
+
+        Collections.sort(nodes, new Comparator<ListNode>() {
+			@Override
+			public int compare(ListNode n1, ListNode n2) {
+				return n1.val - n2.val;
+			}
+		});
+
+		for (ListNode node : nodes) {
+		    runner.next = node;
+		    runner = runner.next;
+		}
 
         return root.next;
     }
