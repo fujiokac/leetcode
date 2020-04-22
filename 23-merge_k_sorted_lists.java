@@ -15,17 +15,24 @@ class Solution {
             return null;
         }
 
-        ListNode root = new ListNode(0);
-        ListNode runner = root;
-
         List<ListNode> nodes = new ArrayList<>();
-        for (int i = 0; i < lists.length; i++) {
-            ListNode node = lists[i];
-            while (node != null) {
-                nodes.add(node);
-                node = node.next;
-            }
+        Set<Integer> emptyLists = new HashSet<>();
+        while (emptyLists.size() < lists.length) {
+            for (int i = 0; i < lists.length; i++) {
+                if (emptyLists.contains(i)) continue;
+                if (lists[i] == null) {
+                    emptyLists.add(i);
+                    continue;
+                }
 
+                nodes.add(lists[i]);
+                lists[i] = lists[i].next;
+
+            }
+        }
+
+        if (nodes.isEmpty()) {
+            return null;
         }
 
         Collections.sort(nodes, new Comparator<ListNode>() {
@@ -34,6 +41,9 @@ class Solution {
 				return n1.val - n2.val;
 			}
 		});
+
+        ListNode root = new ListNode(0);
+        ListNode runner = root;
 
 		for (ListNode node : nodes) {
 		    runner.next = node;
