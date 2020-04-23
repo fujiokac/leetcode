@@ -23,23 +23,32 @@
  */
 class Solution {
     public ListNode reverseKGroup(ListNode head, final int k) {
+        if (head == null || k < 2) {
+            return head;
+        }
+
+        // Check k nodes exist
         ListNode runner = head;
-        ListNode[] buffer = new ListNode[k];
-        for (int i = k-1; i >= 0; i--) {
+        for (int i = 0; i < k; i++) {
             if (runner == null) {
                 return head;
             }
-            buffer[i] = runner;
             runner = runner.next;
         }
-        buffer[k-1].next = reverseKGroup(runner, k);
 
-        ListNode root = new ListNode(0);
-        runner = root;
-        for (int i = 0; i < k; i++) {
-            runner.next = buffer[i];
-            runner = runner.next;
+        // Swap k-1 nodes
+        ListNode a = head, b = head.next, c = null;
+        for (int i = 0; i < k-1; i++) {
+            c = b.next;
+            b.next = a;
+            a = b;
+            b = c;
         }
-        return root.next;
+
+        // Append tail
+        head.next = reverseKGroup(c, k);
+
+        // Return new head
+        return a;
     }
 }
