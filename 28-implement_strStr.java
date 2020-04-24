@@ -12,12 +12,12 @@ class Solution {
     	if (needle.isEmpty()) return 0;
     	if (haystack.isEmpty()) return -1;
 
-		for (int i = 0; i < haystack.length() - needle.length() + 1; i++) {
-			for (int j = i, k = 0; k < needle.length(); j++, k++) {
+		for (int i = 0, hay = haystack.length(), need = needle.length(); i < hay - need + 1; i++) {
+			for (int j = i, k = 0; k < need; j++, k++) {
 				if (haystack.charAt(j) != needle.charAt(k)) {
 					break;
 				}
-				if (k == needle.length()-1) return i;
+				if (k == need-1) return i;
 			}
 		}
 		return -1;
