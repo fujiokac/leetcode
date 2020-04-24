@@ -13,10 +13,11 @@ class Solution {
     	if (haystack.isEmpty()) return -1;
 
 		char[] hay = haystack.toCharArray(), need = needle.toCharArray();
-		for (int i = 0, j = 0, last = -1; i < hay.length - need.length + 1; i = last > i ? last : i+1) {
+		ArrayDeque<Integer> q = new ArrayDeque<>();
+		for (int i = 0, j = 0; i < hay.length - need.length + 1; i = q.isEmpty() ? i+1 : q.poll()) {
 			for (j = 0; j < need.length; j++) {
-				if (last == i && hay[i + j] == need[0]) {
-                    last = i + j;
+				if (j > 0 && hay[i + j] == need[0] && (q.isEmpty() || i+j > q.getLast())) {
+                    q.add(i+j);
 				}
 				if (hay[i + j] != need[j]) {
 					break;
