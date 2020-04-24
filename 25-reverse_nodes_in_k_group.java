@@ -27,30 +27,39 @@ class Solution {
             return head;
         }
 
+        // Tracking reversed nodes
         ListNode root = new ListNode(0);
-        ListNode top = root, tail = root, runner = head;
+        // Tracking start and end of k nodes
+        ListNode top = root, tail = root;
+        // Tracking original untouched nodes
+        ListNode runner = head;
+
         boolean fullGroup = true;
         while (fullGroup) {
+            // Check k nodes exist
             fullGroup = kNodesExist(runner, k);
+            // First unreversed node
             ListNode a = runner;
+            // Track end point
+            tail = runner;
 
+            // Swap k-1 nodes
             if (fullGroup) {
                 ListNode b = a.next, c = null;
-                tail = a;
-                // Swap k-1 nodes
                 for (int i = 0; i < k-1; i++) {
                     c = b.next;
                     b.next = a;
                     a = b;
                     b = c;
                 }
+                // Track next unreversed node
                 runner = c;
             }
 
-            // Attach new head
+            // Attach nodes (reversed in case of fullGroup, untouched otherwise)
             top.next = a;
 
-            // Move top to tail
+            // Move top to end of reversed nodes
             top = tail;
         }
 
