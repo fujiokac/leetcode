@@ -12,27 +12,32 @@ class Solution {
     	if (needle.isEmpty()) return 0;
     	if (haystack.isEmpty()) return -1;
 
+		// Faster than String.charAt()
 		char[] hay = haystack.toCharArray(), need = needle.toCharArray();
-		int[] last = new int[hay.length];
-		for (int i = 0, j = 0, l = 1; i < hay.length - need.length + 1;) {
-            for (j = 0; j < need.length; j++) {
-				if (j > 0 && hay[i + j] == need[0]) {
-					last[l] = i + j;
-                    l = i + j;
-				}
-				if (hay[i + j] != need[j]) {
-                    if (last[i] > i) {
-                        i = last[i];
-                    }
-                    else {
-                        i++;
-                    }
+		// Tracks next index of first letter
+		int[] kmp = new int[hay.length];
 
-					break;
+		for (int i = 0, n = 0, h = 0, last = 0; i < hay.length - need.length + 1; ) {
+            for (n = 0; n < need.length; n++) {
+                h = i + n;
+
+                // Check & track first letter matches
+				if (n > 0 && hay[h] == need[0] && h > last) {
+					kmp[last] = h;
+                    last = h;
+				}
+				// Check substring match
+				if (hay[h] != need[n]) {
+                    break;
 				}
 			}
-			if (j == need.length) return i;
+			// Substring match
+			if (n == need.length) return i;
+
+			// Jump to next known occurrence of first letter
+			i = kmp[i] > i ? kmp[i] : i+1;
 		}
+		// No match ):
 		return -1;
     }
 }
