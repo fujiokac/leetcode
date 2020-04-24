@@ -27,28 +27,43 @@ class Solution {
             return head;
         }
 
-        // Check k nodes exist
-        ListNode runner = head;
-        for (int i = 0; i < k; i++) {
-            if (runner == null) {
-                return head;
+        ListNode root = new ListNode(0);
+        ListNode top = root, tail = root, runner = head;
+        boolean fullGroup = true;
+        while (fullGroup) {
+            fullGroup = kNodesExist(runner, k);
+            ListNode a = runner;
+
+            if (fullGroup) {
+                ListNode b = a.next, c = null;
+                tail = a;
+                // Swap k-1 nodes
+                for (int i = 0; i < k-1; i++) {
+                    c = b.next;
+                    b.next = a;
+                    a = b;
+                    b = c;
+                }
+                runner = c;
             }
-            runner = runner.next;
+
+            // Attach new head
+            top.next = a;
+
+            // Move top to tail
+            top = tail;
         }
 
-        // Swap k-1 nodes
-        ListNode a = head, b = head.next, c = null;
-        for (int i = 0; i < k-1; i++) {
-            c = b.next;
-            b.next = a;
-            a = b;
-            b = c;
+        return root.next;
+    }
+
+    private boolean kNodesExist(ListNode node, final int k) {
+        for (int i = 0; i < k; i++) {
+            if (node == null) {
+                return false;
+            }
+            node = node.next;
         }
-
-        // Append tail
-        head.next = reverseKGroup(c, k);
-
-        // Return new head
-        return a;
+        return true;
     }
 }
