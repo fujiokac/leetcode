@@ -10,6 +10,17 @@ class Solution {
      * -104 <= target <= 104
      */
     public int searchInsert(int[] nums, int target) {
-
+        if(target <= nums[0]) return 0;
+        if(target >=
+        int left = 0, right = nums.length;
+        while(left < right) {
+            int half = left + (right - left)/2;
+            if(target == nums[half]) return half;
+            if(target > nums[half])
+                left = half + 1;
+            else
+                right = half;
+        }
+        return left;
     }
 }
