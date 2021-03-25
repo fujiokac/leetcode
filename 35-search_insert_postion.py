@@ -5,6 +5,8 @@ class Solution(object):
         :type target: int
         :rtype: int
         """
+        if len(nums) == 0:
+            return 0
         if nums.count(target) == 0:
             nums.append(target)
             nums.sort()
