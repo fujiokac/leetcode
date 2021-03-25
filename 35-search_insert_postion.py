@@ -14,8 +14,16 @@ class Solution(object):
 
         if target <= nums[0]:
             return 0
-        elif target > nums[-1]:
+        if target > nums[-1]:
             return len(nums)
-        for i in range(1, len(nums)):
-            if target <= nums[i]:
-                return i
+        left = 0
+        right = len(nums)
+        while left != right:
+            half = left + (right - left)/2
+            if target == nums[half]:
+                return half
+            if target < nums[half]:
+                right = half
+            else:
+                left = half + 1
+        return left
