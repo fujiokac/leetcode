@@ -18,12 +18,13 @@ class Solution(object):
             return len(nums)
         left = 0
         right = len(nums)
-        while left != right:
+        while left < right:
             half = left + (right - left)/2
             if target == nums[half]:
                 return half
-            if target < nums[half]:
-                right = half
-            else:
+            if target > nums[half]:
                 left = half + 1
+            else:
+                right = half
         return left
+
