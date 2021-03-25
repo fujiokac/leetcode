@@ -4,22 +4,18 @@ class Solution(object):
         :type nums: List[int]
         :type target: int
         :rtype: int
-        """
-        if len(nums) == 0:
-            return 0
-        return self.findNextHighest(nums, target)
 
-    def findNextHighest(self, nums, target):
-        length = len(nums)
-        if length == 0:
+        constraints:
+        1 <= nums.length <= 104
+        -104 <= nums[i] <= 104
+        nums contains distinct values sorted in ascending order.
+        -104 <= target <= 104
+        """
+
+        if target <= nums[0]:
             return 0
-        if length == 1:
-            return 0 if target <= nums[0] else 1
-        else:
-            half = length/2
-            if target == nums[half]:
-                return half
-            if target < nums[half]:
-                return self.findNextHighest(nums[:half], target)
-            else:
-                return half + self.findNextHighest(nums[half:], target)
+        elif target > nums[-1]:
+            return len(nums)
+        for i in range(1, len(nums)):
+            if target <= nums[i]:
+                return i
