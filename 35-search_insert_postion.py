@@ -8,6 +8,18 @@ class Solution(object):
         if len(nums) == 0:
             return 0
         if nums.count(target) == 0:
-            nums.append(target)
-            nums.sort()
+            return self.findNextHighest(nums, target)
         return nums.index(target)
+
+    def findNextHighest(self, nums, target):
+        length = len(nums)
+        if length == 0:
+            return 0
+        if length <= 1:
+            return 0 if target < nums[0] else 1
+        else:
+            half = length/2
+            if target < nums[half]:
+                return self.findNextHighest(nums[:half], target)
+            else:
+                return half + self.findNextHighest(nums[half:], target)
