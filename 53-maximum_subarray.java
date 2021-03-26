@@ -13,9 +13,7 @@ class Solution {
         int maxSum = currentSum;
 
         for (int i = 1; i < nums.length; i++) {
-            if (currentSum < 0)
-                currentSum = 0;
-            currentSum += nums[i];
+            currentSum = currentSum < 0 ? nums[i] : currentSum + nums[i];
             if (currentSum > maxSum)
                 maxSum = currentSum;
         }
