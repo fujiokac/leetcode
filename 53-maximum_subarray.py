@@ -11,6 +11,8 @@ class Solution:
         if len(nums) == 1:
             return nums[0]
         currentSum = nums[0]
+        # this variation runs slower -- test case dependent?
+        # maxSum = currentSum
         maxSum = max(currentSum, sum(nums))
 
         for i in range(1, len(nums)):
