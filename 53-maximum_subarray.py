@@ -9,14 +9,15 @@ class Solution:
             return nums[0]
         currentSum = nums[0]
         # this variation runs slower -- test case dependent?
-        # maxSum = currentSum
-        maxSum = max(currentSum, sum(nums))
+        maxSum = currentSum
+        # maxSum = max(currentSum, sum(nums))
 
         for i in range(1, len(nums)):
             if currentSum < 0:
-                currentSum = 0
-            currentSum += nums[i]
-            if currentSum > maxSum:
+                currentSum = nums[i]
+            else:
+                currentSum += nums[i]
+            if maxSum < currentSum:
                 maxSum = currentSum
 
         return maxSum
