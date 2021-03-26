@@ -13,10 +13,7 @@ class Solution:
         # maxSum = max(currentSum, sum(nums))
 
         for i in range(1, len(nums)):
-            if currentSum < 0:
-                currentSum = nums[i]
-            else:
-                currentSum += nums[i]
+            currentSum = nums[i] if currentSum < 0 else currentSum + nums[i]
             if maxSum < currentSum:
                 maxSum = currentSum
 
