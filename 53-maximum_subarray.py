@@ -1,5 +1,5 @@
 class Solution:
-    MIN = -math.pow(10,5)
+    # MIN = -math.pow(10,5)
     def maxSubArray(self, nums: List[int]) -> int:
         # Given an integer array nums, find the contiguous subarray (containing
         # at least one number) which has the largest sum and return its sum.
@@ -10,6 +10,14 @@ class Solution:
             return self.MIN
         if len(nums) == 1:
             return nums[0]
-        numSum = sum(nums)
-        low = nums.index(min(nums))
-        return max(sum(nums), self.maxSubArray(nums[:low]), self.maxSubArray(nums[low+1:]))
+        currentSum = nums[0]
+        maxSum = max(currentSum, sum(nums))
+
+        for i in range(1, len(nums)):
+            if currentSum < 0:
+                currentSum = 0
+            currentSum += nums[i]
+            if currentSum > maxSum:
+                maxSum = currentSum
+
+        return maxSum
