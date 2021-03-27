@@ -6,8 +6,10 @@ class Solution:
 
         # A word is a maximal substring consisting of non-space characters only.
         count = 0
-        while count != len(s):
-            if s[-1 -count] == ' ':
-                break
-            count += 1
+        for i in range(0, len(s)):
+            if s[-1 -i] == ' ':
+                if count > 0:
+                    break
+            else:
+                count += 1
         return count
