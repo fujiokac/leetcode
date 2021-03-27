@@ -5,3 +5,9 @@ class Solution:
         # If the last word does not exist, return 0.
 
         # A word is a maximal substring consisting of non-space characters only.
+        count = 0
+        while count != len(s):
+            if s[-1 -count] == ' ':
+                break
+            count += 1
+        return count
