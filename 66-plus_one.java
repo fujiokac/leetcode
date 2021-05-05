@@ -19,10 +19,14 @@ class Solution {
         return digits;
     }
 
+    /**
+     * Only called in the case all digits are 9
+     * Therefore returns array with length+1
+     * of 1 followed by 0s
+     */
     private int[] appendOne(int[] digits) {
         int[] result = new int[digits.length +1];
         result[0] = 1;
-        System.arraycopy(digits, 0, result, 1, digits.length);
         return result;
     }
 }
